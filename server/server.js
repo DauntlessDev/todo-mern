@@ -30,6 +30,21 @@ app.post("/addTodo", async (req, res) => {
   res.json(todo);
 });
 
+app.put("/updateTodo", async (req, res) => {
+  const newTitle = req.body.newTitle;
+  const id = req.body.id;
+
+  try {
+    await TodoModel.findById(id, (err, updatedTodo) => {
+      updatedTodo.title = newTitle;
+      updatedTodo.save();
+      res.send("update");
+    });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
 app.listen(3001, () => {
   console.log("Listening to the server...");
 });

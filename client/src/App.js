@@ -7,10 +7,16 @@ function App() {
   const [title, setTitle] = useState("todo title");
   // const [state, setCompleted] = useState(false);
 
-  useEffect(() => {
+  const [newTitle, setNewTitle] = useState("");
+
+  const refreshTodoList = () => {
     Axios.get("http://localhost:3001/").then((response) => {
       setTodoList(response.data);
     });
+  };
+
+  useEffect(() => {
+    refreshTodoList();
   });
 
   const addTodo = () => {
@@ -18,7 +24,14 @@ function App() {
       title,
       state: false,
     }).then((response) => {
-      setTodoList([...todoList], { title, state: false });
+      refreshTodoList();
+    });
+  };
+
+  const updateTodo = (id) => {
+    Axios.put("http://localhost:3001/updateTodo", {
+      id,
+      newTitle,
     });
   };
 
@@ -29,17 +42,32 @@ function App() {
       <div className="main">
         {todoList.map((todo) => {
           return (
-            <button onClick={toggleState}>
+            <div key={todo._id}>
               <h1 className={todo.state ? "completed" : "notcompleted"}>
                 Title: {todo.title}
               </h1>
-            </button>
+              <div>
+                <input
+                  type="text"
+                  placeholder="update todo..."
+                  onChange={(event) => {
+                    setNewTitle(event.target.value);
+                  }}
+                />
+                <button onClick={() => updateTodo(todo._id)}>UPDATE</button>
+                <button onClick={addTodo}>DELETE</button>
+              </div>
+            </div>
           );
         })}
 
+        <br />
+        <br />
+        <br />
+
         <div>
           <input
-            type="tyext"
+            type="text"
             placeholder="add todo..."
             onChange={(event) => {
               setTitle(event.target.value);
