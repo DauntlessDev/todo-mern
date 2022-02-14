@@ -35,6 +35,10 @@ function App() {
     });
   };
 
+  const deleteTodo = (id) => {
+    Axios.delete(`http://localhost:3001/deleteTodo/${id}`);
+  };
+
   const toggleState = () => {};
 
   return (
@@ -55,7 +59,7 @@ function App() {
                   }}
                 />
                 <button onClick={() => updateTodo(todo._id)}>UPDATE</button>
-                <button onClick={addTodo}>DELETE</button>
+                <button onClick={() => deleteTodo(todo._id)}>DELETE</button>
               </div>
             </div>
           );
