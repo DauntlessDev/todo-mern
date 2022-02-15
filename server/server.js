@@ -30,6 +30,21 @@ app.post("/addTodo", async (req, res) => {
   res.json(todo);
 });
 
+app.put("/updateTodoState", async (req, res) => {
+  const todoState = req.body.todoState;
+  const id = req.body.id;
+
+  try {
+    await TodoModel.findById(id, (err, updatedTodoState) => {
+      updatedTodoState.state = todoState;
+      updatedTodoState.save();
+      res.send("updatestate");
+    });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
 app.put("/updateTodo", async (req, res) => {
   const newTitle = req.body.newTitle;
   const id = req.body.id;

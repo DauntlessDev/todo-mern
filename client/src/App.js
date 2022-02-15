@@ -5,7 +5,6 @@ import Axios from "axios";
 function App() {
   const [todoList, setTodoList] = useState([]);
   const [title, setTitle] = useState("todo title");
-  // const [state, setCompleted] = useState(false);
 
   const [newTitle, setNewTitle] = useState("");
 
@@ -35,11 +34,17 @@ function App() {
     });
   };
 
+  const updateTodoState = (id, currentState) => {
+    const todoState = !currentState;
+    Axios.put("http://localhost:3001/updateTodoState", {
+      id,
+      todoState,
+    });
+  };
+
   const deleteTodo = (id) => {
     Axios.delete(`http://localhost:3001/deleteTodo/${id}`);
   };
-
-  const toggleState = () => {};
 
   return (
     <div className="App">
@@ -59,6 +64,9 @@ function App() {
                   }}
                 />
                 <button onClick={() => updateTodo(todo._id)}>UPDATE</button>
+                <button onClick={() => updateTodoState(todo._id, todo.state)}>
+                  {todo.state ? "UNCOMPLETE" : "COMPLETE"}
+                </button>
                 <button onClick={() => deleteTodo(todo._id)}>DELETE</button>
               </div>
             </div>
